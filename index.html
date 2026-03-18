@@ -287,6 +287,23 @@
                 </div>
 
                 <div class="row g-3 mt-1">
+                    <div class="col-sm-6">
+                        <label class="form-label" for="gender">Gender *</label>
+                        <select class="form-select" id="gender" name="gender" required>
+                            <option value="" selected disabled>Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label" for="age">Age *</label>
+                        <input type="number" class="form-control" id="age" name="age"
+                               placeholder="Years" min="15" max="100" required>
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-1">
                     <div class="col-12">
                         <label class="form-label" for="programme">Programme *</label>
                         <select class="form-select" id="programme" name="programme" required onchange="updateDepartment()">
@@ -671,12 +688,13 @@
                     // Success! Show SweetAlert and reset form
                     Swal.fire({
                         icon: 'success',
-                        title: 'Booking Confirmed!',
+                        title: 'Booking Successful!',
                         html: `
-                            <p class="mb-3">Your booking reference is: <strong>${result.reference}</strong></p>
+                            <p class="mb-3">Your appointment is successful, a staff will call you for confirmation.</p>
+                            <p class="mb-0">Your booking reference is: <strong>${result.reference}</strong></p>
                             <p class="text-muted small">Please save this reference for your records.</p>
                         `,
-                        confirmButtonText: 'Great!',
+                        confirmButtonText: 'Done',
                         confirmButtonColor: 'var(--primary)',
                         customClass: { 
                             popup: 'rounded-4 shadow-lg border-0',
