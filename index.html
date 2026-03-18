@@ -560,6 +560,7 @@
                 });
                 
                 const result = await response.json();
+                console.log("Portal Response:", result);
                 
                 if (response.ok && result.status === 'success') {
                     // Success! Show SweetAlert and reset form
@@ -579,27 +580,30 @@
                     document.getElementById('preferred_time').value = "";
                 } else {
                     // Server returned error
+                    console.error("Submission failed:", result);
                     Swal.fire({
                         icon: 'error',
                         title: 'Submission Failed',
-                        text: result.message || 'There was an issue processing your booking.',
-                        customClass: { popup: 'rounded-4 shadow-lg border-0' }
+                        text: result.details || result.error || 'There was an issue processing your booking.',
+                        confirmButtonColor: '#842029',
+                        customClass: { popup: 'rounded-4' }
                     });
                 }
-            } catch (err) {
-                console.error('Fetch error:', err);
+            } catch (error) {
+                console.error("Fetch error:", error);
                 Swal.fire({
                     icon: 'error',
-                    title: 'Network Error',
-                    text: 'Could not reach the server. Please check your internet connection and try again.',
-                    customClass: { popup: 'rounded-4 shadow-lg border-0' }
+                    title: 'System Error',
+                    text: 'Could not connect to the cloud bridge. Please try again later.',
+                    confirmButtonColor: '#842029',
+                    customClass: { popup: 'rounded-4' }
                 });
             } finally {
-                // Restore button
+                // Re-enable button
+                submitBtn.disabled = false;
+                btnSpan.innerText = ' Send Request';
                 icon.classList.remove('spinner-border', 'spinner-border-sm');
                 icon.classList.add('bi-send-fill');
-                btnSpan.innerText = 'Send Request';
-                submitBtn.disabled = false;
             }
         });
     })();
