@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USTED – Counselling Booking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            min-height: 100%;
+            /* Maroon top-left wash + gold bottom-right accent + clean centre */
+            background:
+                radial-gradient(ellipse 80% 60% at 0% 0%,   rgba(155,17,26,0.28) 0%, transparent 60%),
+                radial-gradient(ellipse 70% 55% at 100% 100%, rgba(196,154,42,0.28) 0%, transparent 60%),
+                #f5f2ef;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.25rem;
+            color: #111;
+        }
+
+        .wrap {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* ── LOGO ── */
+        .logo-img {
+            width: 76px;
+            height: 76px;
+            object-fit: contain;
+            margin-bottom: 1.1rem;
+            /* subtle drop shadow so it pops from the bg */
+            filter: drop-shadow(0 3px 10px rgba(155,17,26,0.18));
+        }
+
+        /* ── HEADLINE ── */
+        .headline {
+            font-size: 1.2rem;
+            font-weight: 700;
+            line-height: 1.4;
+            color: #1a1a1a;
+            margin-bottom: 0.4rem;
+            max-width: 320px;
+        }
+
+        /* ── SUBTEXT ── */
+        .subtext {
+            font-size: 0.9rem;
+            color: #888;
+            line-height: 1.5;
+            margin-bottom: 1.75rem;
+        }
+
+        /* ── THIN RULE ── */
+        .rule {
+            width: 36px;
+            height: 2px;
+            background: #9b111a;
+            border-radius: 2px;
+            margin-bottom: 1.75rem;
+            opacity: 0.5;
+        }
+
+        /* ── CHOICE CARDS ── */
+        .choices {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .choice {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.15rem 1.2rem;
+            border-radius: 14px;
+            border: 1.5px solid #e4e1de;
+            background: #fff;
+            text-decoration: none;
+            color: #111;
+            text-align: left;
+            transition: border-color 0.17s, box-shadow 0.17s, transform 0.14s;
+        }
+
+        .choice:hover {
+            border-color: #9b111a;
+            box-shadow: 0 4px 18px rgba(155,17,26,0.1);
+            transform: translateY(-1px);
+        }
+
+        .choice:active { transform: scale(0.99); }
+
+        .choice.muted {
+            opacity: 0.5;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        /* icon box */
+        .choice-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(155,17,26,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .choice.muted .choice-icon { background: #f0efed; }
+
+        .choice-icon svg {
+            width: 19px;
+            height: 19px;
+            stroke: #9b111a;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .choice.muted .choice-icon svg { stroke: #b0aca8; }
+
+        /* text */
+        .choice-text { flex: 1; }
+
+        .choice-text strong {
+            display: block;
+            font-size: 0.97rem;
+            font-weight: 700;
+        }
+
+        .choice-text span {
+            font-size: 0.78rem;
+            color: #999;
+        }
+
+        /* arrow */
+        .arrow {
+            color: #ccc;
+            font-size: 1.1rem;
+            line-height: 1;
+            transition: color 0.15s, transform 0.15s;
+        }
+
+        .choice:hover .arrow { color: #9b111a; transform: translateX(2px); }
+
+        /* soon badge */
+        .soon {
+            font-size: 0.64rem;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            background: #fff8e5;
+            color: #a07010;
+            padding: 3px 9px;
+            border-radius: 6px;
+            border: 1px solid rgba(160,112,16,0.25);
+            flex-shrink: 0;
+        }
+
+        /* ── FOOTER ── */
+        .foot {
+            margin-top: 2rem;
+            font-size: 0.72rem;
+            color: #bbb;
+            letter-spacing: 0.02em;
+        }
+
+        /* ── MOBILE ── */
+        @media (max-width: 380px) {
+            .headline { font-size: 1.05rem; }
+            .choice { padding: 1rem 1rem; }
+            .logo-img { width: 64px; height: 64px; }
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+
+    <!-- Official USTED logo -->
+    <img class="logo-img" src="usted_logo.png" alt="USTED Logo">
+
+    <!-- Headline -->
+    <h1 class="headline">Welcome to the USTED Counselling Booking Portal</h1>
+
+    <!-- Subtext -->
+    <p class="subtext">Please select your preferred mode of counselling.</p>
+
+    <!-- Decorative rule -->
+    <div class="rule"></div>
+
+    <!-- Choices -->
+    <div class="choices">
+
+        <!-- One-on-One -->
+        <a href="index.html" class="choice">
+            <div class="choice-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+            </div>
+            <div class="choice-text">
+                <strong>One-on-One Counselling</strong>
+                <span>In-person session at the GCC office</span>
+            </div>
+            <span class="arrow">›</span>
+        </a>
+
+        <!-- Online -->
+        <div class="choice muted">
+            <div class="choice-icon">
+                <svg viewBox="0 0 24 24">
+                    <polygon points="23 7 16 12 23 17 23 7"/>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                </svg>
+            </div>
+            <div class="choice-text">
+                <strong>Online Counselling</strong>
+                <span>Virtual session via video call</span>
+            </div>
+            <span class="soon">Coming Soon</span>
+        </div>
+
+    </div>
+
+    <p class="foot">AAMUSTED &nbsp;·&nbsp; Kumasi Campus</p>
+
+</div>
+</body>
+</html>
