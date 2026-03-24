@@ -12,28 +12,26 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <style>
         :root {
-            --primary: #0d6efd;
-            --primary-light: #e7f1ff;
+            --primary: #9b111a;
+            --primary-light: rgba(155,17,26,0.08);
             --secondary: #6c757d;
             --success: #198754;
-            --bg-body: #f8fafc;
-            --ガラス-white: rgba(255, 255, 255, 0.95);
+            --bg-body: #f5f2ef;
+            --glass-white: rgba(255, 255, 255, 0.97);
             --text-dark: #1e293b;
             --text-muted: #64748b;
-            --border-color: #e2e8f0;
+            --border-color: #e4e1de;
         }
 
         * { box-sizing: border-box; }
 
         body {
             background-color: var(--bg-body);
-            background-image: 
-                radial-gradient(at 0% 0%, hsla(217,100%,95%,1) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(200,100%,95%,1) 0, transparent 50%),
-                radial-gradient(at 100% 100%, hsla(180,100%,98%,1) 0, transparent 50%),
-                radial-gradient(at 0% 100%, hsla(210,100%,95%,1) 0, transparent 50%);
+            background-image:
+                radial-gradient(ellipse 80% 60% at 0% 0%,   rgba(155,17,26,0.22) 0%, transparent 60%),
+                radial-gradient(ellipse 70% 55% at 100% 100%, rgba(196,154,42,0.22) 0%, transparent 60%);
             min-height: 100vh;
-            font-family: 'Outfit', -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, sans-serif;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: var(--text-dark);
             display: flex;
             align-items: center;
@@ -49,21 +47,21 @@
         }
 
         .card-booking {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.97);
             border: 1px solid var(--border-color);
-            border-radius: 24px;
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
-            overflow: visible; 
-            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.12);
+            overflow: visible;
+            backdrop-filter: blur(12px);
         }
 
         .header-section {
-            background: linear-gradient(135deg, #9b111a 0%, #9b0c0ce6 100%);
-            padding: 2.5rem 1.5rem;
+            background: linear-gradient(150deg, #7a0d15 0%, #9b111a 60%, #b01520 100%);
+            padding: 2rem 1.5rem 2.5rem;
             color: white;
             text-align: center;
             position: relative;
-            border-radius: 24px 24px 0 0;
+            border-radius: 20px 20px 0 0;
         }
 
         .header-section::after {
@@ -72,22 +70,25 @@
             bottom: -1px;
             left: 0;
             right: 0;
-            height: 24px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 24px 24px 0 0;
+            height: 22px;
+            background: #ffffff;
+            border-radius: 22px 22px 0 0;
         }
 
         .logo-box {
-            width: 56px;
-            height: 56px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
-            border-radius: 16px;
+            width: 72px;
+            height: 72px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.25rem;
-            border: 1px solid rgba(255,255,255,0.3);
+            margin: 0 auto 1rem;
+        }
+
+        .logo-box img {
+            width: 72px;
+            height: 72px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
         }
 
         .form-content {
@@ -114,7 +115,7 @@
 
         .form-control:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+            box-shadow: 0 0 0 4px rgba(155, 17, 26, 0.1);
             background: #fff;
         }
 
@@ -147,7 +148,7 @@
             width: 100%;
             margin-top: 1.5rem;
             transition: all 0.3s;
-            box-shadow: 0 8px 25px -5px rgba(13, 110, 253, 0.4);
+            box-shadow: 0 8px 25px -5px rgba(155, 17, 26, 0.4);
         }
 
         .btn-submit:active {
@@ -167,7 +168,7 @@
         }
 
         .privacy-box i {
-            color: var(--primary);
+            color: #9b111a;
             font-size: 1.25rem;
         }
 
@@ -185,7 +186,7 @@
         }
 
         .flatpickr-time input:hover, .flatpickr-time .flatpickr-am-pm:hover {
-            background: var(--primary-light);
+            background: rgba(155,17,26,0.07);
         }
 
         /* Responsive Tweaks */
@@ -205,7 +206,7 @@
         .date-input-wrapper i {
             position: absolute;
             left: 1rem;
-            color: var(--primary);
+            color: #9b111a;
             pointer-events: none;
             z-index: 10;
         }
@@ -245,11 +246,10 @@
     <div class="card-booking">
         <div class="header-section">
             <div class="logo-box">
-                <i class="bi bi-calendar-heart fs-3"></i>
+                <img src="usted_logo.png" alt="USTED Logo">
             </div>
-            <h4 class="fw-bold mb-1">USTED</h4>
-            <p class="mb-0 opacity-75 small fw-medium">Guidance & Counselling Centre</p>
-            <h2 class="fw-bold mt-2 display-6 fs-3">Book Appointment</h2>
+            <p class="mb-1 opacity-80 small fw-medium" style="letter-spacing:0.04em;">Guidance &amp; Counselling Centre</p>
+            <h2 class="fw-bold mt-1 display-6 fs-3">Book Appointment</h2>
         </div>
 
         <div class="form-content">
