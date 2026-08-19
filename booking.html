@@ -325,14 +325,29 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* ── Footer ── */
+        .back-link {
+            text-align: center;
+            padding: 16px 20px 0;
+        }
+        .back-link a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.88rem;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            transition: background var(--transition);
+        }
+        .back-link a:hover { background: var(--primary-light); }
         .footer-text {
             text-align: center;
-            padding: 16px 20px 4px;
-            font-size: 0.75rem;
+            padding: 12px 20px 4px;
+            font-size: 0.72rem;
             color: var(--text-muted);
-            line-height: 1.5;
         }
-        .footer-text strong { color: var(--text-secondary); font-weight: 600; }
 
         /* ── Validation ── */
         .was-validated .input:invalid,
@@ -608,6 +623,10 @@
             </button>
         </form>
 
+        <div class="back-link">
+            <a href="index.html"><i class="bi bi-house-fill"></i> Back to Home</a>
+        </div>
+
         <div class="footer-text">
             Walk-ins are welcome.<br>
             <strong>USTED Kumasi Campus - GCC (ROB 1st Floor, Room 30)</strong>
@@ -819,10 +838,16 @@
                     icon: 'success',
                     title: 'Booking Confirmed!',
                     html: '<p>Your appointment has been scheduled.</p><p style="margin:12px 0 0"><strong style="font-size:1.1em">Reference: ' + result.reference + '</strong></p><p style="color:#888;font-size:0.85em;margin-top:8px">Save this reference. A confirmation SMS will be sent to your phone.</p>',
-                    confirmButtonText: 'Done',
+                    showDenyButton: true,
+                    confirmButtonText: 'Go Home',
+                    denyButtonText: 'Book Another',
                     confirmButtonColor: '#9b111a',
+                    denyButtonColor: '#6c757d',
                     customClass: { popup: 'swal2-popup rounded-4', confirmButton: 'px-5 py-2 rounded-3 fw-bold' }
-                }).then(() => window.location.reload());
+                }).then((res) => {
+                    if (res.isConfirmed) window.location.href = 'index.html';
+                    else window.location.reload();
+                });
             } else {
                 Swal.fire({ icon: 'error', title: 'Submission Failed', text: result.message || 'Please try again.', confirmButtonColor: '#842029' });
             }
