@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Booking Status - USTED Guidance & Counselling</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: #9b111a;
+            --primary-light: rgba(155,17,26,0.08);
+            --bg-body: #f5f2ef;
+            --glass-white: rgba(255, 255, 255, 0.97);
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e4e1de;
+        }
+        * { box-sizing: border-box; }
+        body {
+            background-color: var(--bg-body);
+            background-image:
+                radial-gradient(ellipse 80% 60% at 0% 0%, rgba(155,17,26,0.22) 0%, transparent 60%),
+                radial-gradient(ellipse 70% 55% at 100% 100%, rgba(196,154,42,0.22) 0%, transparent 60%);
+            min-height: 100vh;
+            font-family: 'Outfit', -apple-system, sans-serif;
+            color: var(--text-dark);
+            display: flex; align-items: center; justify-content: center;
+            padding: 1rem;
+        }
+        .container-limited { max-width: 600px; width: 100%; }
+        .card-booking {
+            background: var(--glass-white);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            box-shadow: 0 12px 40px -8px rgba(0,0,0,0.12);
+            overflow: visible;
+        }
+        .header-section {
+            background: linear-gradient(150deg, #7a0d15 0%, #9b111a 60%, #b01520 100%);
+            padding: 2rem 1.5rem 2.5rem;
+            color: white; text-align: center; position: relative;
+            border-radius: 20px 20px 0 0;
+        }
+        .header-section::after {
+            content: '';
+            position: absolute; bottom: -1px; left: 0; right: 0; height: 22px;
+            background: #fff; border-radius: 22px 22px 0 0;
+        }
+        .form-content { padding: 1rem 1.5rem 2.5rem; }
+        .form-label { font-weight: 600; font-size: 0.85rem; color: var(--text-dark); margin-bottom: 0.5rem; }
+        .form-control {
+            background: #fff; border: 1.5px solid var(--border-color);
+            border-radius: 12px; padding: 0.85rem 1rem; font-size: 1rem; transition: all 0.2s;
+        }
+        .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(155,17,26,0.1); }
+        .btn-lookup {
+            background: linear-gradient(135deg, #9b111a 0%, #9b0c0ce6 100%);
+            border: none; border-radius: 14px; padding: 1rem;
+            font-weight: 700; font-size: 1.05rem; color: white; width: 100%; margin-top: 1rem;
+            box-shadow: 0 8px 25px -5px rgba(155,17,26,0.4); transition: all 0.3s;
+        }
+        .btn-lookup:active { transform: scale(0.98); }
+        .result-card {
+            background: #f8fafc; border: 1px solid var(--border-color);
+            border-radius: 14px; padding: 1.2rem; margin-top: 1rem;
+        }
+        .result-card .ref { font-weight: 700; color: var(--primary); font-size: 1.1rem; }
+        .status-badge {
+            display: inline-block; padding: 4px 12px; border-radius: 20px;
+            font-size: 0.78rem; font-weight: 600;
+        }
+        .status-Pending { background: #fef3cd; color: #856404; }
+        .status-Accepted { background: #d4edda; color: #155724; }
+        .status-Scheduled { background: #cce5ff; color: #004085; }
+        .status-Completed { background: #d1ecf1; color: #0c5460; }
+        .status-Rejected { background: #f8d7da; color: #721c24; }
+        .divider { display: flex; align-items: center; gap: 12px; margin: 1.5rem 0; }
+        .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border-color); }
+        .divider span { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+        .back-link { text-align: center; margin-top: 1.2rem; }
+        .back-link a { color: var(--primary); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+        @media (max-width: 576px) { body { padding: 0.5rem; } .form-content { padding: 1rem 1.25rem 2rem; } }
+    </style>
+</head>
+<body>
+<div class="container-limited">
+    <div class="card-booking">
+        <div class="header-section">
+            <div style="width:60px;height:60px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;padding:5px;box-shadow:0 2px 12px rgba(0,0,0,0.15);">
+                <img src="usted_logo.png" alt="USTED" style="width:100%;height:100%;object-fit:contain;">
+            </div>
+            <h2 class="fw-bold display-6 fs-3">Check Booking Status</h2>
+            <p class="mb-0 opacity-80 small">Enter your reference number or phone number</p>
+        </div>
+        <div class="form-content">
+            <form id="lookupForm">
+                <div class="mb-3">
+                    <label class="form-label">Booking Reference</label>
+                    <input type="text" class="form-control" id="refInput" placeholder="e.g. BK-2026-0001">
+                </div>
+                <div class="divider"><span>OR</span></div>
+                <div class="mb-3">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" id="phoneInput" placeholder="e.g. 0240000000">
+                </div>
+                <button type="submit" class="btn-lookup" id="lookupBtn">
+                    <i class="bi bi-search me-2"></i><span>Look Up</span>
+                </button>
+            </form>
+            <div id="results" style="display:none;"></div>
+            <div class="back-link">
+                <a href="index.html"><i class="bi bi-arrow-left me-1"></i>Back to Booking</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+document.getElementById('lookupForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const ref = document.getElementById('refInput').value.trim();
+    const phone = document.getElementById('phoneInput').value.trim();
+    if (!ref && !phone) {
+        Swal.fire({icon:'warning', title:'Enter Something', text:'Please provide a reference number or phone number.'});
+        return;
+    }
+    const btn = document.getElementById('lookupBtn');
+    btn.disabled = true;
+    btn.querySelector('span').innerText = ' Searching...';
+    btn.querySelector('i').className = 'spinner-border spinner-border-sm me-2';
+    try {
+        const resp = await fetch('https://usted-gcc-system.vercel.app/api/lookup_booking', {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({reference:ref, phone:phone})
+        });
+        const data = await resp.json();
+        const container = document.getElementById('results');
+        if (data.status === 'success' && data.bookings && data.bookings.length > 0) {
+            let html = '';
+            data.bookings.forEach(b => {
+                const dateStr = b.preferred_date || 'TBD';
+                const timeStr = b.preferred_time || 'TBD';
+                const status = b.status || 'Unknown';
+                html += `<div class="result-card">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="ref">${b.reference}</span>
+                        <span class="status-badge status-${status}">${status}</span>
+                    </div>
+                    <div style="font-size:0.88rem;color:#475569;">
+                        <div><strong>Date:</strong> ${dateStr} at ${timeStr}</div>
+                        <div><strong>Programme:</strong> ${b.programme || 'N/A'}</div>
+                        <div><strong>Reason:</strong> ${b.reason || 'Not specified'}</div>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+            container.style.display = 'block';
+        } else {
+            container.innerHTML = '<div class="result-card text-center" style="color:#64748b;"><i class="bi bi-info-circle me-1"></i>No bookings found. Please check your reference or phone number.</div>';
+            container.style.display = 'block';
+        }
+    } catch(err) {
+        Swal.fire({icon:'error', title:'Error', text:'Could not connect to the system. Please try again.'});
+    } finally {
+        btn.disabled = false;
+        btn.querySelector('span').innerText = 'Look Up';
+        btn.querySelector('i').className = 'bi bi-search me-2';
+    }
+});
+</script>
+</body>
+</html>
