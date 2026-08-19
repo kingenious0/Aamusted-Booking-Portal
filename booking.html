@@ -2,747 +2,840 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#9b111a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Book an Appointment - USTED Guidance & Counselling</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <style>
         :root {
             --primary: #9b111a;
+            --primary-dark: #7a0d15;
             --primary-light: rgba(155,17,26,0.08);
-            --secondary: #6c757d;
-            --success: #198754;
+            --gold: #c49a2a;
+            --gold-light: rgba(196,154,42,0.12);
             --bg-body: #f5f2ef;
-            --glass-white: rgba(255, 255, 255, 0.97);
-            --text-dark: #1e293b;
-            --text-muted: #64748b;
-            --border-color: #e4e1de;
+            --surface: #ffffff;
+            --text: #1a1a1a;
+            --text-secondary: #555;
+            --text-muted: #888;
+            --border: #e4e1de;
+            --border-focus: #9b111a;
+            --success: #16a34a;
+            --success-bg: rgba(22,163,74,0.08);
+            --error: #dc2626;
+            --error-bg: rgba(220,38,38,0.08);
+            --radius-sm: 10px;
+            --radius: 14px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow: 0 4px 16px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+            --transition: 200ms cubic-bezier(0.4,0,0.2,1);
         }
-
-        * { box-sizing: border-box; }
-
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
         body {
-            background-color: var(--bg-body);
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-body);
             background-image:
-                radial-gradient(ellipse 80% 60% at 0% 0%,   rgba(155,17,26,0.22) 0%, transparent 60%),
-                radial-gradient(ellipse 70% 55% at 100% 100%, rgba(196,154,42,0.22) 0%, transparent 60%);
+                radial-gradient(ellipse 80% 60% at 0% 0%, rgba(155,17,26,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse 70% 55% at 100% 100%, rgba(196,154,42,0.15) 0%, transparent 60%);
             min-height: 100vh;
-            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            color: var(--text-dark);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
+            min-height: 100dvh;
+            color: var(--text);
+            line-height: 1.5;
+            padding: 0;
             margin: 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
         }
-
-        .container-limited {
-            max-width: 600px;
+        .page-wrap {
             width: 100%;
-            margin: 1.5rem auto;
+            max-width: 540px;
+            padding: 16px 12px calc(env(safe-area-inset-bottom, 16px) + 16px);
+            margin: 0 auto;
+        }
+        @media (min-width: 640px) {
+            body { align-items: center; }
+            .page-wrap { padding: 32px 16px; }
         }
 
-        .card-booking {
-            background: rgba(255, 255, 255, 0.97);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.12);
-            overflow: visible;
-            backdrop-filter: blur(12px);
+        /* ── Card ── */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.04);
         }
 
-        .header-section {
-            background: linear-gradient(150deg, #7a0d15 0%, #9b111a 60%, #b01520 100%);
-            padding: 2rem 1.5rem 2.5rem;
-            color: white;
+        /* ── Header ── */
+        .header {
+            background: linear-gradient(150deg, var(--primary-dark) 0%, var(--primary) 50%, #b01520 100%);
+            padding: 28px 20px 36px;
             text-align: center;
             position: relative;
-            border-radius: 20px 20px 0 0;
+            color: #fff;
         }
-
-        .header-section::after {
+        .header::after {
             content: '';
             position: absolute;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 22px;
-            background: #ffffff;
-            border-radius: 22px 22px 0 0;
+            bottom: -1px; left: 0; right: 0;
+            height: 24px;
+            background: var(--surface);
+            border-radius: 24px 24px 0 0;
         }
-
-        .logo-box {
-            width: 80px;
-            height: 80px;
+        .logo {
+            width: 64px; height: 64px;
             background: #fff;
             border-radius: 50%;
+            display: inline-flex;
+            align-items: center; justify-content: center;
+            padding: 5px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            margin-bottom: 12px;
+        }
+        .logo img { width: 100%; height: 100%; object-fit: contain; }
+        .header-sub {
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+        .header-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+        @media (min-width: 640px) {
+            .logo { width: 76px; height: 76px; }
+            .header { padding: 32px 24px 40px; }
+            .header-title { font-size: 1.5rem; }
+        }
+
+        /* ── Progress ── */
+        .progress-bar-container {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            padding: 6px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            gap: 6px;
+            padding: 16px 20px 0;
         }
-
-        .logo-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+        .progress-step {
+            flex: 1;
+            height: 4px;
+            border-radius: 4px;
+            background: var(--border);
+            transition: background var(--transition);
         }
+        .progress-step.active { background: var(--primary); }
+        .progress-step.done { background: var(--success); }
 
-        .form-content {
-            padding: 1rem 1.5rem 2.5rem;
+        /* ── Form Body ── */
+        .form-body { padding: 8px 20px 24px; }
+
+        /* ── Sections ── */
+        .section {
+            margin-top: 20px;
         }
-
-        .form-label {
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        .form-control, .form-select {
-            background: #fff;
-            border: 1.5px solid var(--border-color);
-            border-radius: 12px;
-            padding: 0.85rem 1rem;
-            font-size: 1rem;
-            color: var(--text-dark);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .form-control:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(155, 17, 26, 0.1);
-            background: #fff;
-        }
-
-        .section-header {
+        .section-head {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin: 1.5rem 0 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 16px;
         }
-
-        .section-header h5 {
-            font-size: 0.9rem;
+        .section-icon {
+            width: 36px; height: 36px;
+            border-radius: var(--radius-sm);
+            background: var(--primary-light);
+            display: flex;
+            align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .section-icon i { color: var(--primary); font-size: 1rem; }
+        .section-label {
+            font-size: 0.8rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-            margin: 0;
+            letter-spacing: 0.06em;
+            color: var(--text-secondary);
         }
 
-        .btn-submit {
-            background: linear-gradient(135deg, #9b111a 0%, #9b0c0ce6 100%);
-            border: none;
-            border-radius: 14px;
-            padding: 1.1rem;
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: white;
+        /* ── Fields ── */
+        .field { margin-bottom: 14px; }
+        .field-label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        .field-label .req { color: var(--error); margin-left: 2px; }
+        .field-hint {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .input, .select, .textarea {
             width: 100%;
-            margin-top: 1.5rem;
-            transition: all 0.3s;
-            box-shadow: 0 8px 25px -5px rgba(155, 17, 26, 0.4);
-        }
-
-        .btn-submit:active {
-            transform: scale(0.98);
-        }
-
-        .privacy-box {
-            background: #f1f5f9;
-            border-radius: 16px;
-            padding: 1rem;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            display: flex;
-            gap: 12px;
-            margin-top: 2rem;
-            border: 1px dashed var(--border-color);
-        }
-
-        .privacy-box i {
-            color: #9b111a;
-            font-size: 1.25rem;
-        }
-
-        /* Flatpickr Premium Customization */
-        .flatpickr-calendar {
-            background: #fff;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
+            min-height: 48px;
+            padding: 12px 14px;
             font-family: inherit;
+            font-size: 1rem;
+            color: var(--text);
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            outline: none;
+            transition: border-color var(--transition), box-shadow var(--transition);
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23555' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+        }
+        .textarea {
+            min-height: 80px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+        .input:focus, .select:focus, .textarea:focus {
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px rgba(155,17,26,0.1);
+        }
+        .input.error, .select.error { border-color: var(--error); }
+        .field-error {
+            font-size: 0.75rem;
+            color: var(--error);
+            margin-top: 4px;
+            display: none;
+        }
+        .field-error.show { display: block; }
+
+        /* ── Inline pair ── */
+        .field-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        @media (max-width: 380px) {
+            .field-pair { grid-template-columns: 1fr; }
         }
 
-        .flatpickr-time {
-            height: 60px;
+        /* ── Date/Time ── */
+        .datetime-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
         }
-
-        .flatpickr-time input:hover, .flatpickr-time .flatpickr-am-pm:hover {
-            background: rgba(155,17,26,0.07);
+        @media (max-width: 380px) {
+            .datetime-row { grid-template-columns: 1fr; }
         }
-
-        /* Responsive Tweaks */
-        @media (max-width: 576px) {
-            body { padding: 0.5rem; }
-            .header-section { padding: 2rem 1rem; }
-            .form-content { padding: 1rem 1.25rem 2rem; }
-            .form-control { padding: 0.75rem 0.9rem; }
-        }
-        /* Custom Date Styling with functional icon */
-        .date-input-wrapper {
+        .input-icon-wrap {
             position: relative;
+        }
+        .input-icon-wrap .input { padding-left: 40px; }
+        .input-icon-wrap i {
+            position: absolute;
+            left: 14px; top: 50%; transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 0.95rem;
+            pointer-events: none;
+        }
+
+        /* ── Info banner ── */
+        .info-banner {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 14px;
+            background: var(--primary-light);
+            border-radius: var(--radius);
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+        .info-banner i { color: var(--primary); font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+        /* ── Privacy ── */
+        .privacy {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 14px;
+            background: #f8f7f5;
+            border: 1px dashed var(--border);
+            border-radius: var(--radius);
+            margin-top: 18px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+        .privacy i { color: var(--primary); font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+        .privacy strong { color: var(--text); }
+
+        /* ── Submit ── */
+        .submit-btn {
             display: flex;
             align-items: center;
-        }
-        
-        .date-input-wrapper i {
-            position: absolute;
-            left: 1rem;
-            color: #9b111a;
-            pointer-events: none;
-            z-index: 10;
-        }
-        
-        .date-input-wrapper input {
-            padding-left: 2.8rem !important;
-        }
-
-        /* Input Group specifically for Time to ensure it stays functional */
-        .input-group-text {
-            background-color: #fff;
-            border-right: none;
-            padding-left: 1rem;
-            border-radius: 12px 0 0 12px !important;
-        }
-        
-        .timer-trigger-input {
-            border-left: none !important;
-            border-radius: 0 12px 12px 0 !important;
-        }
-
-        /* Ensure native date picker behaves on mobile */
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            width: auto; height: auto;
-            color: transparent;
-            background: transparent;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            min-height: 52px;
+            margin-top: 20px;
+            padding: 14px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary) 0%, #8a0f17 100%);
+            border: none;
+            border-radius: var(--radius);
             cursor: pointer;
-            z-index: 5;
+            box-shadow: 0 6px 20px rgba(155,17,26,0.35);
+            transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .submit-btn:hover { box-shadow: 0 8px 28px rgba(155,17,26,0.45); }
+        .submit-btn:active { transform: scale(0.98); }
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .submit-btn .spinner {
+            width: 18px; height: 18px;
+            border: 2.5px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: none;
+        }
+        .submit-btn.loading .spinner { display: block; }
+        .submit-btn.loading .btn-icon { display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Footer ── */
+        .footer-text {
+            text-align: center;
+            padding: 16px 20px 4px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        .footer-text strong { color: var(--text-secondary); font-weight: 600; }
+
+        /* ── Validation ── */
+        .was-validated .input:invalid,
+        .was-validated .select:invalid,
+        .was-validated .textarea:invalid {
+            border-color: var(--error);
+        }
+
+        /* ── Animations ── */
+        .fade-in {
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Safe area padding for notch devices ── */
+        @supports (padding-top: env(safe-area-inset-top)) {
+            .header { padding-top: calc(28px + env(safe-area-inset-top)); }
         }
     </style>
 </head>
 <body>
 
-<div class="container-limited">
-    <div class="card-booking">
-        <div class="header-section">
-            <div class="logo-box">
+<div class="page-wrap">
+    <div class="card">
+        <div class="header">
+            <div class="logo">
                 <img src="usted_logo.png" alt="USTED Logo">
             </div>
-            <p class="mb-1 opacity-80 small fw-medium" style="letter-spacing:0.04em;">Guidance &amp; Counselling Centre</p>
-            <h2 class="fw-bold mt-1 display-6 fs-3">Book Appointment</h2>
+            <p class="header-sub">Guidance &amp; Counselling Centre</p>
+            <h1 class="header-title">Book an Appointment</h1>
         </div>
 
-        <div class="form-content">
-            <form class="needs-validation" novalidate id="bookingForm">
-                
-                <!-- Section: Personal -->
-                <div class="section-header">
-                    <i class="bi bi-person-fill text-primary"></i>
-                    <h5>Your Information</h5>
+        <div class="progress-bar-container" role="progressbar" aria-label="Form progress">
+            <div class="progress-step active" data-step="1"></div>
+            <div class="progress-step" data-step="2"></div>
+            <div class="progress-step" data-step="3"></div>
+        </div>
+
+        <form class="form-body needs-validation" novalidate id="bookingForm">
+
+            <!-- Section 1: Personal -->
+            <div class="section" data-section="1">
+                <div class="section-head">
+                    <div class="section-icon"><i class="bi bi-person-fill"></i></div>
+                    <span class="section-label">Your Information</span>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label" for="full_name">Full Name *</label>
-                    <input type="text" class="form-control" id="full_name" name="full_name"
-                           placeholder="Enter your full name" required>
+                <div class="field">
+                    <label class="field-label" for="full_name">Full Name <span class="req">*</span></label>
+                    <input class="input" type="text" id="full_name" name="full_name"
+                           placeholder="e.g. Kwame Mensah" required autocomplete="name">
+                    <div class="field-error" id="err_full_name">Please enter your full name</div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label" for="email">Email *</label>
-                    <input type="email" class="form-control" id="email" name="email"
-                           placeholder="Enter your email" required>
+                <div class="field">
+                    <label class="field-label" for="email">Email <span class="req">*</span></label>
+                    <input class="input" type="email" id="email" name="email"
+                           placeholder="you@stu.usted.edu.gh" required autocomplete="email">
+                    <div class="field-error" id="err_email">Please enter a valid email</div>
                 </div>
 
-                <div class="row g-3">
-                    <div class="col-sm-6">
-                        <label class="form-label" for="index_number">Index Number *</label>
-                        <input type="text" class="form-control" id="index_number" name="index_number"
-                               placeholder="10-Digit Number" required
+                <div class="field-pair">
+                    <div class="field">
+                        <label class="field-label" for="index_number">Index Number <span class="req">*</span></label>
+                        <input class="input" type="text" id="index_number" name="index_number"
+                               placeholder="10-digit number" required
                                pattern="\d{10}" maxlength="10" inputmode="numeric"
-                               oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                               title="Please enter exactly 10 digits">
+                               autocomplete="off"
+                               oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                        <div class="field-error" id="err_index">Enter exactly 10 digits</div>
                     </div>
-                    <div class="col-sm-6">
-                        <label class="form-label" for="phone">Phone Number *</label>
-                        <input type="tel" class="form-control" id="phone" name="phone"
-                               placeholder="024XXXXXXX" required>
+                    <div class="field">
+                        <label class="field-label" for="phone">Phone <span class="req">*</span></label>
+                        <input class="input" type="tel" id="phone" name="phone"
+                               placeholder="024XXXXXXX" required inputmode="tel" autocomplete="tel">
+                        <div class="field-error" id="err_phone">Please enter your phone number</div>
                     </div>
                 </div>
 
-                <div class="row g-3 mt-1">
-                    <div class="col-sm-6">
-                        <label class="form-label" for="gender">Gender *</label>
-                        <select class="form-select" id="gender" name="gender" required>
-                            <option value="" selected disabled>Select Gender</option>
+                <div class="field-pair">
+                    <div class="field">
+                        <label class="field-label" for="gender">Gender <span class="req">*</span></label>
+                        <select class="select" id="gender" name="gender" required>
+                            <option value="" disabled selected>Select</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                             <option value="Other">Other</option>
                         </select>
                     </div>
-                    <div class="col-sm-6">
-                        <label class="form-label" for="age">Age *</label>
-                        <input type="number" class="form-control" id="age" name="age"
-                               placeholder="Years" min="15" max="100" required>
+                    <div class="field">
+                        <label class="field-label" for="age">Age <span class="req">*</span></label>
+                        <input class="input" type="number" id="age" name="age"
+                               placeholder="Years" min="15" max="100" required inputmode="numeric">
                     </div>
                 </div>
-
-                <div class="row g-3 mt-1">
-                    <div class="col-12">
-                        <label class="form-label" for="programme">Programme *</label>
-                        <select class="form-select" id="programme" name="programme" required onchange="updateDepartment()">
-                            <option value="" selected disabled>Select your programme</option>
-                            <option value="B.Sc. Economics">B.Sc. Economics</option>
-                            <option value="B.Sc. Electrical and Electronics Engineering">B.Sc. Electrical and Electronics Engineering</option>
-                            <option value="B.Sc. Electrical and Electronics Engineering Technology Education">B.Sc. Electrical and Electronics Engineering Technology Education</option>
-                            <option value="B.Sc. Fashion Design and Textiles Education">B.Sc. Fashion Design and Textiles Education</option>
-                            <option value="B.Sc. Information Technology">B.Sc. Information Technology</option>
-                            <option value="B.Sc. Marketing">B.Sc. Marketing</option>
-                            <option value="B.Sc. Entrepreneurship Education">B.Sc. Entrepreneurship Education</option>
-                            <option value="B.Sc. Marketing and Entrepreneurship">B.Sc. Marketing and Entrepreneurship</option>
-                            <option value="B.Sc. Mechanical Engineering Technology">B.Sc. Mechanical Engineering Technology</option>
-                            <option value="B.Sc. Mechanical Engineering Technology Education">B.Sc. Mechanical Engineering Technology Education</option>
-                            <option value="B.Sc. Plumbing, Gas and Sanitary Technology">B.Sc. Plumbing, Gas and Sanitary Technology</option>
-                            <option value="B.Sc. Procurement and Supply Chain Management">B.Sc. Procurement and Supply Chain Management</option>
-                            <option value="B.Sc. Welding and Fabrication Technology with Education">B.Sc. Welding and Fabrication Technology with Education</option>
-                            <option value="Diploma in Education (Competency-Based Training) CBT">Diploma in Education (Competency-Based Training) CBT</option>
-                            <option value="B.Sc. Wood Technology with Education">B.Sc. Wood Technology with Education</option>
-                            <option value="2-Year Diploma in Construction Technology">2-Year Diploma in Construction Technology</option>
-                            <option value="2-Year Diploma in Electrical and Electronics Engineering Technology">2-Year Diploma in Electrical and Electronics Engineering Technology</option>
-                            <option value="2-year Diploma in Fashion Design and Textiles">2-year Diploma in Fashion Design and Textiles</option>
-                            <option value="2-year Diploma in Office Management and Computer Applications">2-year Diploma in Office Management and Computer Applications</option>
-                            <option value="2-year Diploma in Wood Technology">2-year Diploma in Wood Technology</option>
-                            <option value="2-year in Diploma in Architecture and Digital Construction">2-year in Diploma in Architecture and Digital Construction</option>
-                            <option value="2-year Diploma in Catering and Hospitality">2-year Diploma in Catering and Hospitality</option>
-                            <option value="2-year Diploma in Business Administration, Accounting">2-year Diploma in Business Administration, Accounting</option>
-                            <option value="2-year Diploma in Business Administration, Management">2-year Diploma in Business Administration, Management</option>
-                            <option value="2-year Diploma in Economics">2-year Diploma in Economics</option>
-                            <option value="2-year Diploma in Human Resource Management">2-year Diploma in Human Resource Management</option>
-                            <option value="B.Sc. Biomedical Equipment Engineering">B.Sc. Biomedical Equipment Engineering</option>
-                            <option value="B.Ed. Applied Technology (Electrical and Electronics)">B.Ed. Applied Technology (Electrical and Electronics)</option>
-                            <option value="B.Ed. STEM (Engineering with Biomedical Science)">B.Ed. STEM (Engineering with Biomedical Science)</option>
-                            <option value="B.Ed. STEM (Engineering with Manufacturing)">B.Ed. STEM (Engineering with Manufacturing)</option>
-                            <option value="B.Ed. Computing with Internet of Things (IOT)">B.Ed. Computing with Internet of Things (IOT)</option>
-                            <option value="B.Ed. Computing with Artificial Intelligence (AI)">B.Ed. Computing with Artificial Intelligence (AI)</option>
-                            <option value="B.Ed. STEM (Engineering with Robotics)">B.Ed. STEM (Engineering with Robotics)</option>
-                            <option value="Applied Technology (Automotive and Mechanical) B.Ed.">Applied Technology (Automotive and Mechanical) B.Ed.</option>
-                            <option value="B.B.A. Human Resource Management">B.B.A. Human Resource Management</option>
-                            <option value="B.B.A. Management">B.B.A. Management</option>
-                            <option value="B.Ed Early Grade (Early Childhood)">B.Ed Early Grade (Early Childhood)</option>
-                            <option value="B.Ed Junior High">B.Ed Junior High</option>
-                            <option value="B.Ed Upper Primary">B.Ed Upper Primary</option>
-                            <option value="B.Ed. Applied Technology (Building Construction and Wood)">B.Ed. Applied Technology (Building Construction and Wood)</option>
-                            <option value="B.Ed. Arabic">B.Ed. Arabic</option>
-                            <option value="B.Ed. Business Studies (Accounting)">B.Ed. Business Studies (Accounting)</option>
-                            <option value="B.Ed. Business Studies (Management)">B.Ed. Business Studies (Management)</option>
-                            <option value="B.Ed. Computing with Artificial Intelligence">B.Ed. Computing with Artificial Intelligence</option>
-                            <option value="B.Ed. Design and Communication Technology">B.Ed. Design and Communication Technology</option>
-                            <option value="B.Ed. Economics">B.Ed. Economics</option>
-                            <option value="B.Ed. English.">B.Ed. English.</option>
-                            <option value="B.Ed. French">B.Ed. French</option>
-                            <option value="B.Ed. Geography">B.Ed. Geography</option>
-                            <option value="B.Ed. Ghanaian Language">B.Ed. Ghanaian Language</option>
-                            <option value="B.Ed. Home Economics (Clothing and Textiles)">B.Ed. Home Economics (Clothing and Textiles)</option>
-                            <option value="B.Ed. Home Economics (Food and Nutrition)">B.Ed. Home Economics (Food and Nutrition)</option>
-                            <option value="B.Ed. Information Technology">B.Ed. Information Technology</option>
-                            <option value="B.Ed. Mathematics">B.Ed. Mathematics</option>
-                            <option value="B.Ed. Physical Education and Health">B.Ed. Physical Education and Health</option>
-                            <option value="B.Ed. Social Studies">B.Ed. Social Studies</option>
-                            <option value="B.Sc Computerised Accounting">B.Sc Computerised Accounting</option>
-                            <option value="B.Sc. Accounting">B.Sc. Accounting</option>
-                            <option value="B.Sc. Admin Accounting">B.Sc. Admin Accounting</option>
-                            <option value="B.Sc. Automotive Engineering Technology Education">B.Sc. Automotive Engineering Technology Education</option>
-                            <option value="B.Sc. Banking and Finance">B.Sc. Banking and Finance</option>
-                            <option value="B.Sc. Catering and Hospitality Education">B.Sc. Catering and Hospitality Education</option>
-                            <option value="B.Sc. Civil Engineering">B.Sc. Civil Engineering</option>
-                            <option value="B.Sc. Construction Technology and Management with Education">B.Sc. Construction Technology and Management with Education</option>
-                            <option value="B.Sc. Cyber Security and Digital Forensics">B.Sc. Cyber Security and Digital Forensics</option>
-                            <option value="Other">Other (Not Listed)</option>
-                        </select>
-                        <!-- Other Programme Text Input -->
-                        <div id="other_programme_container" style="display: none;" class="mt-2 animate__animated animate__fadeIn">
-                            <label class="form-label text-primary small fw-bold" for="other_programme_text">Specify Other Programme *</label>
-                            <input type="text" class="form-control border-primary shadow-sm" id="other_programme_text" name="other_programme_text" placeholder="Type your full programme name">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <label class="form-label" for="department">Department *</label>
-                        <select class="form-select" id="department" name="department" required onchange="checkOtherDept()">
-                            <option value="" selected disabled>Select Department</option>
-                            <option value="ACCOUNTING EDUCATION">ACCOUNTING EDUCATION</option>
-                            <option value="CONSTRUCTION AND WOOD">CONSTRUCTION AND WOOD</option>
-                            <option value="ECONOMICS EDUCATION">ECONOMICS EDUCATION</option>
-                            <option value="ELECTRICALS AND ELECTRONICS">ELECTRICALS AND ELECTRONICS</option>
-                            <option value="FASHION AND TEXTILES">FASHION AND TEXTILES</option>
-                            <option value="HOSPITALITY AND TOURISM">HOSPITALITY AND TOURISM</option>
-                            <option value="HUMAN RESOURCE">HUMAN RESOURCE</option>
-                            <option value="IEDEI">IEDEI</option>
-                            <option value="INFORMATION TECHNOLOGY EDUCATION">INFORMATION TECHNOLOGY EDUCATION</option>
-                            <option value="INTERDISPLINARY STUDIES">INTERDISPLINARY STUDIES</option>
-                            <option value="LANGUAGES EDUCATION">LANGUAGES EDUCATION</option>
-                            <option value="MANAGEMENT EDUCATION">MANAGEMENT EDUCATION</option>
-                            <option value="MATHEMATICS EDUCATION">MATHEMATICS EDUCATION</option>
-                            <option value="MECHANICAL AND AUTOMOTIVE">MECHANICAL AND AUTOMOTIVE</option>
-                            <option value="(COMPETENCY-BASED TRAINING) CBT">(COMPETENCY-BASED TRAINING) CBT</option>
-                            <option value="OTHER">OTHER (Specify Below)</option>
-                        </select>
-                        <!-- Other Department Text Input -->
-                        <div id="other_department_container" style="display: none;" class="mt-2 animate__animated animate__fadeIn">
-                            <label class="form-label text-primary small fw-bold" for="other_department_text">Specify Other Department *</label>
-                            <input type="text" class="form-control border-primary shadow-sm" id="other_department_text" name="other_department_text" placeholder="Type your department name">
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <label class="form-label" for="hall_of_residence">Hall of Residence *</label>
-                        <select class="form-select" id="hall_of_residence" name="hall_of_residence" required>
-                            <option value="" selected disabled>Select Hall</option>
-                            <option value="Autonomy Hall">Autonomy Hall</option>
-                            <option value="Atwima Hall">Atwima Hall</option>
-                            <option value="Opoku Ware II">Opoku Ware II</option>
-                            <option value="Off-Campus">Off-Campus</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Section: Schedule -->
-                <div class="section-header mt-4">
-                    <i class="bi bi-calendar-event-fill text-primary"></i>
-                    <h5>Schedule Details</h5>
-                </div>
-
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label" for="preferred_date">Preferred Date *</label>
-                        <div class="date-input-wrapper">
-                            <i class="bi bi-calendar-check text-primary"></i>
-                            <input type="date" class="form-control" id="preferred_date" name="preferred_date" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label" for="preferred_time">Preferred Time *</label>
-                        <div class="input-group" id="time_picker_group" style="cursor: pointer;">
-                            <span class="input-group-text">
-                                <i class="bi bi-clock text-primary"></i>
-                            </span>
-                            <input type="text" class="form-control timer-trigger-input" id="preferred_time" name="preferred_time"
-                                   placeholder="Click to set time" required readonly style="background-color: #fff !important; cursor: pointer;">
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="alert alert-info border-0 bg-primary bg-opacity-10 mt-3 p-2 rounded-3 d-flex align-items-center">
-                    <i class="bi bi-info-circle-fill text-primary me-2"></i>
-                    <span class="small text-dark opacity-75">Hours: 8 AM — 5 PM. Closed for lunch at 1 PM.</span>
-                </div>
-
-                <div class="mb-3 mt-4">
-                    <label class="form-label" for="reason">Reason (General Description)</label>
-                    <textarea class="form-control" id="reason" name="reason" rows="2"
-                              placeholder="Optional: Just a few words about why you're visiting."></textarea>
-                </div>
-
-                <div class="privacy-box">
-                    <i class="bi bi-patch-check-fill"></i>
-                    <div>
-                        <strong>Private & Secure</strong><br>
-                        Your details are confidential and only used for appointment scheduling at the GCC.
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-submit">
-                    <i class="bi bi-send-fill me-2"></i><span>Send Request</span>
-                </button>
-            </form>
-
-            <div class="text-center mt-4">
-                <p class="text-muted small">
-                    Walk-ins are also welcome.<br>
-                    <strong>USTED Kumasi Campus <br>Guidance & Counselling Center (ROB First Floor Room 30)</strong>
-                </p>
             </div>
+
+            <!-- Section 2: Academic -->
+            <div class="section" data-section="2">
+                <div class="section-head">
+                    <div class="section-icon"><i class="bi bi-book-fill"></i></div>
+                    <span class="section-label">Academic Details</span>
+                </div>
+
+                <div class="field">
+                    <label class="field-label" for="programme">Programme <span class="req">*</span></label>
+                    <select class="select" id="programme" name="programme" required onchange="updateDepartment()">
+                        <option value="" disabled selected>Select your programme</option>
+                        <option value="B.Sc. Economics">B.Sc. Economics</option>
+                        <option value="B.Sc. Electrical and Electronics Engineering">B.Sc. Electrical &amp; Electronics Eng.</option>
+                        <option value="B.Sc. Electrical and Electronics Engineering Technology Education">B.Sc. EET Education</option>
+                        <option value="B.Sc. Fashion Design and Textiles Education">B.Sc. Fashion Design &amp; Textiles Ed.</option>
+                        <option value="B.Sc. Information Technology">B.Sc. Information Technology</option>
+                        <option value="B.Sc. Marketing">B.Sc. Marketing</option>
+                        <option value="B.Sc. Entrepreneurship Education">B.Sc. Entrepreneurship Education</option>
+                        <option value="B.Sc. Marketing and Entrepreneurship">B.Sc. Marketing &amp; Entrepreneurship</option>
+                        <option value="B.Sc. Mechanical Engineering Technology">B.Sc. Mechanical Eng. Technology</option>
+                        <option value="B.Sc. Mechanical Engineering Technology Education">B.Sc. Mechanical ET Education</option>
+                        <option value="B.Sc. Plumbing, Gas and Sanitary Technology">B.Sc. Plumbing, Gas &amp; Sanitary Tech</option>
+                        <option value="B.Sc. Procurement and Supply Chain Management">B.Sc. Procurement &amp; Supply Chain</option>
+                        <option value="B.Sc. Welding and Fabrication Technology with Education">B.Sc. Welding &amp; Fabrication Tech Ed.</option>
+                        <option value="Diploma in Education (Competency-Based Training) CBT">Diploma in Education (CBT)</option>
+                        <option value="B.Sc. Wood Technology with Education">B.Sc. Wood Technology Ed.</option>
+                        <option value="2-Year Diploma in Construction Technology">2-Yr Diploma Construction Tech</option>
+                        <option value="2-Year Diploma in Electrical and Electronics Engineering Technology">2-Yr Diploma EET</option>
+                        <option value="2-year Diploma in Fashion Design and Textiles">2-Yr Diploma Fashion Design</option>
+                        <option value="2-year Diploma in Office Management and Computer Applications">2-Yr Diploma Office Mgmt</option>
+                        <option value="2-year Diploma in Wood Technology">2-Yr Diploma Wood Tech</option>
+                        <option value="2-year in Diploma in Architecture and Digital Construction">2-Yr Diploma Architecture</option>
+                        <option value="2-year Diploma in Catering and Hospitality">2-Yr Diploma Catering &amp; Hospitality</option>
+                        <option value="2-year Diploma in Business Administration, Accounting">2-Yr Diploma Business Admin (Acct)</option>
+                        <option value="2-year Diploma in Business Administration, Management">2-Yr Diploma Business Admin (Mgmt)</option>
+                        <option value="2-year Diploma in Economics">2-Yr Diploma Economics</option>
+                        <option value="2-year Diploma in Human Resource Management">2-Yr Diploma HR Management</option>
+                        <option value="B.Sc. Biomedical Equipment Engineering">B.Sc. Biomedical Equipment Eng.</option>
+                        <option value="B.Ed. Applied Technology (Electrical and Electronics)">B.Ed. Applied Tech (E&amp;E)</option>
+                        <option value="B.Ed. STEM (Engineering with Biomedical Science)">B.Ed. STEM (Biomedical)</option>
+                        <option value="B.Ed. STEM (Engineering with Manufacturing)">B.Ed. STEM (Manufacturing)</option>
+                        <option value="B.Ed. Computing with Internet of Things (IOT)">B.Ed. Computing IoT</option>
+                        <option value="B.Ed. Computing with Artificial Intelligence (AI)">B.Ed. Computing AI</option>
+                        <option value="B.Ed. STEM (Engineering with Robotics)">B.Ed. STEM Robotics</option>
+                        <option value="Applied Technology (Automotive and Mechanical) B.Ed.">B.Ed. Applied Tech (Auto &amp; Mech)</option>
+                        <option value="B.B.A. Human Resource Management">B.B.A. HR Management</option>
+                        <option value="B.B.A. Management">B.B.A. Management</option>
+                        <option value="B.Ed Early Grade (Early Childhood)">B.Ed. Early Grade</option>
+                        <option value="B.Ed Junior High">B.Ed. Junior High</option>
+                        <option value="B.Ed Upper Primary">B.Ed. Upper Primary</option>
+                        <option value="B.Ed. Applied Technology (Building Construction and Wood)">B.Ed. Applied Tech (Building)</option>
+                        <option value="B.Ed. Arabic">B.Ed. Arabic</option>
+                        <option value="B.Ed. Business Studies (Accounting)">B.Ed. Business Studies (Acct)</option>
+                        <option value="B.Ed. Business Studies (Management)">B.Ed. Business Studies (Mgmt)</option>
+                        <option value="B.Ed. Computing with Artificial Intelligence">B.Ed. Computing AI</option>
+                        <option value="B.Ed. Design and Communication Technology">B.Ed. Design &amp; Comm Tech</option>
+                        <option value="B.Ed. Economics">B.Ed. Economics</option>
+                        <option value="B.Ed. English.">B.Ed. English</option>
+                        <option value="B.Ed. French">B.Ed. French</option>
+                        <option value="B.Ed. Geography">B.Ed. Geography</option>
+                        <option value="B.Ed. Ghanaian Language">B.Ed. Ghanaian Language</option>
+                        <option value="B.Ed. Home Economics (Clothing and Textiles)">B.Ed. Home Econ (Clothing)</option>
+                        <option value="B.Ed. Home Economics (Food and Nutrition)">B.Ed. Home Econ (Food &amp; Nutrition)</option>
+                        <option value="B.Ed. Information Technology">B.Ed. Information Technology</option>
+                        <option value="B.Ed. Mathematics">B.Ed. Mathematics</option>
+                        <option value="B.Ed. Physical Education and Health">B.Ed. Physical Ed. &amp; Health</option>
+                        <option value="B.Ed. Social Studies">B.Ed. Social Studies</option>
+                        <option value="B.Sc Computerised Accounting">B.Sc. Computerised Accounting</option>
+                        <option value="B.Sc. Accounting">B.Sc. Accounting</option>
+                        <option value="B.Sc. Admin Accounting">B.Sc. Admin Accounting</option>
+                        <option value="B.Sc. Automotive Engineering Technology Education">B.Sc. Automotive ET Education</option>
+                        <option value="B.Sc. Banking and Finance">B.Sc. Banking &amp; Finance</option>
+                        <option value="B.Sc. Catering and Hospitality Education">B.Sc. Catering &amp; Hospitality Ed.</option>
+                        <option value="B.Sc. Civil Engineering">B.Sc. Civil Engineering</option>
+                        <option value="B.Sc. Construction Technology and Management with Education">B.Sc. Construction Tech &amp; Mgmt Ed.</option>
+                        <option value="B.Sc. Cyber Security and Digital Forensics">B.Sc. Cyber Security &amp; Digital Forensics</option>
+                        <option value="Other">Other (Not Listed)</option>
+                    </select>
+                    <div id="other_programme_container" style="display:none" class="field" style="margin-top:8px;">
+                        <label class="field-label" for="other_programme_text">Specify Programme <span class="req">*</span></label>
+                        <input class="input" type="text" id="other_programme_text" name="other_programme_text" placeholder="Type your full programme name">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="field-label" for="department">Department <span class="req">*</span></label>
+                    <select class="select" id="department" name="department" required onchange="checkOtherDept()">
+                        <option value="" disabled selected>Select Department</option>
+                        <option value="ACCOUNTING EDUCATION">Accounting Education</option>
+                        <option value="CONSTRUCTION AND WOOD">Construction &amp; Wood</option>
+                        <option value="ECONOMICS EDUCATION">Economics Education</option>
+                        <option value="ELECTRICALS AND ELECTRONICS">Electricals &amp; Electronics</option>
+                        <option value="FASHION AND TEXTILES">Fashion &amp; Textiles</option>
+                        <option value="HOSPITALITY AND TOURISM">Hospitality &amp; Tourism</option>
+                        <option value="HUMAN RESOURCE">Human Resource</option>
+                        <option value="IEDEI">IEDEI</option>
+                        <option value="INFORMATION TECHNOLOGY EDUCATION">IT Education</option>
+                        <option value="INTERDISPLINARY STUDIES">Interdisciplinary Studies</option>
+                        <option value="LANGUAGES EDUCATION">Languages Education</option>
+                        <option value="MANAGEMENT EDUCATION">Management Education</option>
+                        <option value="MATHEMATICS EDUCATION">Mathematics Education</option>
+                        <option value="MECHANICAL AND AUTOMOTIVE">Mechanical &amp; Automotive</option>
+                        <option value="(COMPETENCY-BASED TRAINING) CBT">CBT</option>
+                        <option value="OTHER">Other (Specify Below)</option>
+                    </select>
+                    <div id="other_department_container" style="display:none" class="field" style="margin-top:8px;">
+                        <label class="field-label" for="other_department_text">Specify Department <span class="req">*</span></label>
+                        <input class="input" type="text" id="other_department_text" name="other_department_text" placeholder="Type your department name">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="field-label" for="hall_of_residence">Hall of Residence <span class="req">*</span></label>
+                    <select class="select" id="hall_of_residence" name="hall_of_residence" required>
+                        <option value="" disabled selected>Select Hall</option>
+                        <option value="Autonomy Hall">Autonomy Hall</option>
+                        <option value="Atwima Hall">Atwima Hall</option>
+                        <option value="Opoku Ware II">Opoku Ware II</option>
+                        <option value="Off-Campus">Off-Campus</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Section 3: Schedule -->
+            <div class="section" data-section="3">
+                <div class="section-head">
+                    <div class="section-icon"><i class="bi bi-calendar-event-fill"></i></div>
+                    <span class="section-label">Schedule</span>
+                </div>
+
+                <div class="datetime-row">
+                    <div class="field">
+                        <label class="field-label" for="preferred_date">Preferred Date <span class="req">*</span></label>
+                        <div class="input-icon-wrap">
+                            <i class="bi bi-calendar-check"></i>
+                            <input class="input" type="date" id="preferred_date" name="preferred_date" required>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="preferred_time">Preferred Time <span class="req">*</span></label>
+                        <div class="input-icon-wrap" id="time_picker_group" style="cursor:pointer">
+                            <i class="bi bi-clock"></i>
+                            <input class="input" type="text" id="preferred_time" name="preferred_time"
+                                   placeholder="Tap to set" required readonly
+                                   style="cursor:pointer">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-banner">
+                    <i class="bi bi-info-circle-fill"></i>
+                    <span>Office hours: 8 AM - 5 PM. Closed for lunch 1-2 PM.</span>
+                </div>
+
+                <div class="field" style="margin-top:14px">
+                    <label class="field-label" for="reason">Reason for Visit</label>
+                    <textarea class="textarea" id="reason" name="reason" rows="2"
+                              placeholder="Optional: Briefly describe why you're visiting..."></textarea>
+                </div>
+            </div>
+
+            <!-- Privacy -->
+            <div class="privacy">
+                <i class="bi bi-shield-lock-fill"></i>
+                <div><strong>Private &amp; Secure</strong> - Your details are confidential and only used for appointment scheduling.</div>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span class="spinner"></span>
+                <i class="bi bi-send-fill btn-icon"></i>
+                <span class="btn-text">Submit Booking Request</span>
+            </button>
+        </form>
+
+        <div class="footer-text">
+            Walk-ins are welcome.<br>
+            <strong>USTED Kumasi Campus - GCC (ROB 1st Floor, Room 30)</strong>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    (function () {
-        'use strict';
-        
-        // IMPORTANT: Change this URL to your Vercel Bridge URL after deployment
-        const API_BASE_URL = 'https://usted-gcc-system.vercel.app';
+(function() {
+    'use strict';
+    const API_BASE_URL = 'https://usted-gcc-system.vercel.app';
 
-        const PROGRAM_MAPPINGS = {
-            "B.Sc. Economics": "ECONOMICS EDUCATION",
-            "B.Sc. Electrical and Electronics Engineering": "ELECTRICALS AND ELECTRONICS",
-            "B.Sc. Electrical and Electronics Engineering Technology Education": "ELECTRICALS AND ELECTRONICS",
-            "B.Sc. Fashion Design and Textiles Education": "FASHION AND TEXTILES",
-            "B.Sc. Information Technology": "INFORMATION TECHNOLOGY EDUCATION",
-            "B.Sc. Marketing": "MANAGEMENT EDUCATION",
-            "B.Sc. Entrepreneurship Education": "IEDEI",
-            "B.Sc. Marketing and Entrepreneurship": "IEDEI",
-            "B.Sc. Mechanical Engineering Technology": "MECHANICAL AND AUTOMOTIVE",
-            "B.Sc. Mechanical Engineering Technology Education": "MECHANICAL AND AUTOMOTIVE",
-            "B.Sc. Plumbing, Gas and Sanitary Technology": "CONSTRUCTION AND WOOD",
-            "B.Sc. Procurement and Supply Chain Management": "ACCOUNTING EDUCATION",
-            "B.Sc. Welding and Fabrication Technology with Education": "MECHANICAL AND AUTOMOTIVE",
-            "Diploma in Education (Competency-Based Training) CBT": "(COMPETENCY-BASED TRAINING) CBT",
-            "B.Sc. Wood Technology with Education": "CONSTRUCTION AND WOOD",
-            "2-Year Diploma in Construction Technology": "CONSTRUCTION AND WOOD",
-            "2-Year Diploma in Electrical and Electronics Engineering Technology": "ELECTRICALS AND ELECTRONICS",
-            "2-year Diploma in Fashion Design and Textiles": "FASHION AND TEXTILES",
-            "2-year Diploma in Office Management and Computer Applications": "MANAGEMENT EDUCATION",
-            "2-year Diploma in Wood Technology": "CONSTRUCTION AND WOOD",
-            "2-year in Diploma in Architecture and Digital Construction": "MECHANICAL AND AUTOMOTIVE",
-            "2-year Diploma in Catering and Hospitality": "HOSPITALITY AND TOURISM",
-            "2-year Diploma in Business Administration, Accounting": "ACCOUNTING EDUCATION",
-            "2-year Diploma in Business Administration, Management": "MANAGEMENT EDUCATION",
-            "2-year Diploma in Economics": "ECONOMICS EDUCATION",
-            "2-year Diploma in Human Resource Management": "HUMAN RESOURCE",
-            "B.Sc. Biomedical Equipment Engineering": "ELECTRICALS AND ELECTRONICS",
-            "B.Ed. Applied Technology (Electrical and Electronics)": "ELECTRICALS AND ELECTRONICS",
-            "B.Ed. STEM (Engineering with Biomedical Science)": "ELECTRICALS AND ELECTRONICS",
-            "B.Ed. STEM (Engineering with Manufacturing)": "CONSTRUCTION AND WOOD",
-            "B.Ed. Computing with Internet of Things (IOT)": "INFORMATION TECHNOLOGY EDUCATION",
-            "B.Ed. Computing with Artificial Intelligence (AI)": "INFORMATION TECHNOLOGY EDUCATION",
-            "B.Ed. STEM (Engineering with Robotics)": "ELECTRICALS AND ELECTRONICS",
-            "Applied Technology (Automotive and Mechanical) B.Ed.": "MECHANICAL AND AUTOMOTIVE",
-            "B.B.A. Human Resource Management": "HUMAN RESOURCE",
-            "B.B.A. Management": "MANAGEMENT EDUCATION",
-            "B.Ed Early Grade (Early Childhood)": "INTERDISPLINARY STUDIES",
-            "B.Ed Junior High": "INTERDISPLINARY STUDIES",
-            "B.Ed Upper Primary": "INTERDISPLINARY STUDIES",
-            "B.Ed. Applied Technology (Building Construction and Wood)": "CONSTRUCTION AND WOOD",
-            "B.Ed. Arabic": "LANGUAGES EDUCATION",
-            "B.Ed. Business Studies (Accounting)": "ACCOUNTING EDUCATION",
-            "B.Ed. Business Studies (Management)": "MANAGEMENT EDUCATION",
-            "B.Ed. Computing with Artificial Intelligence": "INFORMATION TECHNOLOGY EDUCATION",
-            "B.Ed. Design and Communication Technology": "CONSTRUCTION AND WOOD",
-            "B.Ed. Economics": "ECONOMICS EDUCATION",
-            "B.Ed. English.": "LANGUAGES EDUCATION",
-            "B.Ed. French": "LANGUAGES EDUCATION",
-            "B.Ed. Geography": "INTERDISPLINARY STUDIES",
-            "B.Ed. Ghanaian Language": "LANGUAGES EDUCATION",
-            "B.Ed. Home Economics (Clothing and Textiles)": "FASHION AND TEXTILES",
-            "B.Ed. Home Economics (Food and Nutrition)": "HOSPITALITY AND TOURISM",
-            "B.Ed. Information Technology": "INFORMATION TECHNOLOGY EDUCATION",
-            "B.Ed. Mathematics": "MATHEMATICS EDUCATION",
-            "B.Ed. Physical Education and Health": "INTERDISPLINARY STUDIES",
-            "B.Ed. Social Studies": "INTERDISPLINARY STUDIES",
-            "B.Sc Computerised Accounting": "ACCOUNTING EDUCATION",
-            "B.Sc. Accounting": "ACCOUNTING EDUCATION",
-            "B.Sc. Admin Accounting": "ACCOUNTING EDUCATION",
-            "B.Sc. Automotive Engineering Technology Education": "MECHANICAL AND AUTOMOTIVE",
-            "B.Sc. Banking and Finance": "ACCOUNTING EDUCATION",
-            "B.Sc. Catering and Hospitality Education": "HOSPITALITY AND TOURISM",
-            "B.Sc. Civil Engineering": "CONSTRUCTION AND WOOD",
-            "B.Sc. Construction Technology and Management with Education": "CONSTRUCTION AND WOOD",
-            "B.Sc. Cyber Security and Digital Forensics": "INFORMATION TECHNOLOGY EDUCATION"
-        };
+    const PROGRAM_MAPPINGS = {
+        "B.Sc. Economics": "ECONOMICS EDUCATION",
+        "B.Sc. Electrical and Electronics Engineering": "ELECTRICALS AND ELECTRONICS",
+        "B.Sc. Electrical and Electronics Engineering Technology Education": "ELECTRICALS AND ELECTRONICS",
+        "B.Sc. Fashion Design and Textiles Education": "FASHION AND TEXTILES",
+        "B.Sc. Information Technology": "INFORMATION TECHNOLOGY EDUCATION",
+        "B.Sc. Marketing": "MANAGEMENT EDUCATION",
+        "B.Sc. Entrepreneurship Education": "IEDEI",
+        "B.Sc. Marketing and Entrepreneurship": "IEDEI",
+        "B.Sc. Mechanical Engineering Technology": "MECHANICAL AND AUTOMOTIVE",
+        "B.Sc. Mechanical Engineering Technology Education": "MECHANICAL AND AUTOMOTIVE",
+        "B.Sc. Plumbing, Gas and Sanitary Technology": "CONSTRUCTION AND WOOD",
+        "B.Sc. Procurement and Supply Chain Management": "ACCOUNTING EDUCATION",
+        "B.Sc. Welding and Fabrication Technology with Education": "MECHANICAL AND AUTOMOTIVE",
+        "Diploma in Education (Competency-Based Training) CBT": "(COMPETENCY-BASED TRAINING) CBT",
+        "B.Sc. Wood Technology with Education": "CONSTRUCTION AND WOOD",
+        "2-Year Diploma in Construction Technology": "CONSTRUCTION AND WOOD",
+        "2-Year Diploma in Electrical and Electronics Engineering Technology": "ELECTRICALS AND ELECTRONICS",
+        "2-year Diploma in Fashion Design and Textiles": "FASHION AND TEXTILES",
+        "2-year Diploma in Office Management and Computer Applications": "MANAGEMENT EDUCATION",
+        "2-year Diploma in Wood Technology": "CONSTRUCTION AND WOOD",
+        "2-year in Diploma in Architecture and Digital Construction": "MECHANICAL AND AUTOMOTIVE",
+        "2-year Diploma in Catering and Hospitality": "HOSPITALITY AND TOURISM",
+        "2-year Diploma in Business Administration, Accounting": "ACCOUNTING EDUCATION",
+        "2-year Diploma in Business Administration, Management": "MANAGEMENT EDUCATION",
+        "2-year Diploma in Economics": "ECONOMICS EDUCATION",
+        "2-year Diploma in Human Resource Management": "HUMAN RESOURCE",
+        "B.Sc. Biomedical Equipment Engineering": "ELECTRICALS AND ELECTRONICS",
+        "B.Ed. Applied Technology (Electrical and Electronics)": "ELECTRICALS AND ELECTRONICS",
+        "B.Ed. STEM (Engineering with Biomedical Science)": "ELECTRICALS AND ELECTRONICS",
+        "B.Ed. STEM (Engineering with Manufacturing)": "CONSTRUCTION AND WOOD",
+        "B.Ed. Computing with Internet of Things (IOT)": "INFORMATION TECHNOLOGY EDUCATION",
+        "B.Ed. Computing with Artificial Intelligence (AI)": "INFORMATION TECHNOLOGY EDUCATION",
+        "B.Ed. STEM (Engineering with Robotics)": "ELECTRICALS AND ELECTRONICS",
+        "Applied Technology (Automotive and Mechanical) B.Ed.": "MECHANICAL AND AUTOMOTIVE",
+        "B.B.A. Human Resource Management": "HUMAN RESOURCE",
+        "B.B.A. Management": "MANAGEMENT EDUCATION",
+        "B.Ed Early Grade (Early Childhood)": "INTERDISPLINARY STUDIES",
+        "B.Ed Junior High": "INTERDISPLINARY STUDIES",
+        "B.Ed Upper Primary": "INTERDISPLINARY STUDIES",
+        "B.Ed. Applied Technology (Building Construction and Wood)": "CONSTRUCTION AND WOOD",
+        "B.Ed. Arabic": "LANGUAGES EDUCATION",
+        "B.Ed. Business Studies (Accounting)": "ACCOUNTING EDUCATION",
+        "B.Ed. Business Studies (Management)": "MANAGEMENT EDUCATION",
+        "B.Ed. Computing with Artificial Intelligence": "INFORMATION TECHNOLOGY EDUCATION",
+        "B.Ed. Design and Communication Technology": "CONSTRUCTION AND WOOD",
+        "B.Ed. Economics": "ECONOMICS EDUCATION",
+        "B.Ed. English.": "LANGUAGES EDUCATION",
+        "B.Ed. French": "LANGUAGES EDUCATION",
+        "B.Ed. Geography": "INTERDISPLINARY STUDIES",
+        "B.Ed. Ghanaian Language": "LANGUAGES EDUCATION",
+        "B.Ed. Home Economics (Clothing and Textiles)": "FASHION AND TEXTILES",
+        "B.Ed. Home Economics (Food and Nutrition)": "HOSPITALITY AND TOURISM",
+        "B.Ed. Information Technology": "INFORMATION TECHNOLOGY EDUCATION",
+        "B.Ed. Mathematics": "MATHEMATICS EDUCATION",
+        "B.Ed. Physical Education and Health": "INTERDISPLINARY STUDIES",
+        "B.Ed. Social Studies": "INTERDISPLINARY STUDIES",
+        "B.Sc Computerised Accounting": "ACCOUNTING EDUCATION",
+        "B.Sc. Accounting": "ACCOUNTING EDUCATION",
+        "B.Sc. Admin Accounting": "ACCOUNTING EDUCATION",
+        "B.Sc. Automotive Engineering Technology Education": "MECHANICAL AND AUTOMOTIVE",
+        "B.Sc. Banking and Finance": "ACCOUNTING EDUCATION",
+        "B.Sc. Catering and Hospitality Education": "HOSPITALITY AND TOURISM",
+        "B.Sc. Civil Engineering": "CONSTRUCTION AND WOOD",
+        "B.Sc. Construction Technology and Management with Education": "CONSTRUCTION AND WOOD",
+        "B.Sc. Cyber Security and Digital Forensics": "INFORMATION TECHNOLOGY EDUCATION"
+    };
 
-        window.updateDepartment = function() {
-            const progSelect = document.getElementById('programme');
-            const deptSelect = document.getElementById('department');
-            const otherProgContainer = document.getElementById('other_programme_container');
-            const otherProgInput = document.getElementById('other_programme_text');
-            const prog = progSelect.value;
-            
-            if (prog === "Other") {
-                otherProgContainer.style.display = 'block';
-                otherProgInput.required = true;
-                deptSelect.value = "OTHER";
-                checkOtherDept(); // Expand the other dept box too
-            } else {
-                otherProgContainer.style.display = 'none';
-                otherProgInput.required = false;
-                
-                if (PROGRAM_MAPPINGS[prog]) {
-                    deptSelect.value = PROGRAM_MAPPINGS[prog];
-                    // Visual feedback
-                    deptSelect.style.borderColor = "var(--success)";
-                    setTimeout(() => deptSelect.style.borderColor = "", 1000);
-                }
-                checkOtherDept();
-            }
-        };
+    // Progress tracking
+    const sections = document.querySelectorAll('.section');
+    const progressSteps = document.querySelectorAll('.progress-step');
 
-        window.checkOtherDept = function() {
-            const deptSelect = document.getElementById('department');
-            const otherDeptContainer = document.getElementById('other_department_container');
-            const otherDeptInput = document.getElementById('other_department_text');
-            
-            if (deptSelect.value === "OTHER") {
-                otherDeptContainer.style.display = 'block';
-                otherDeptInput.required = true;
-            } else {
-                otherDeptContainer.style.display = 'none';
-                otherDeptInput.required = false;
-            }
-        };
-
-        const dateInput = document.getElementById('preferred_date');
-        if (dateInput) {
-            const today = new Date().toISOString().split('T')[0];
-            dateInput.min = today;
-        }
-
-        const timePicker = flatpickr("#preferred_time", {
-            enableTime: true,
-            noCalendar: true,
-            dateFormat: "h:i K",
-            minTime: "08:00",
-            maxTime: "16:30",
-            minuteIncrement: 1,
-            static: true,
-            onChange: function(selectedDates, dateStr, instance) {
-                if (selectedDates.length > 0) {
-                    const time = selectedDates[0];
-                    if (time.getHours() === 13) {
-                        Swal.fire({
-                            icon: 'info',
-                            title: 'Lunch Break',
-                            text: 'The counsellor is on break from 1:00 PM to 2:00 PM.',
-                            timer: 3500,
-                            timerProgressBar: true,
-                            showConfirmButton: false,
-                            customClass: { popup: 'rounded-4 border-0 shadow' }
-                        });
-                        instance.clear();
-                    }
-                }
-            }
-        });
-
-        // Make the whole group clickable
-        const timePickerGroup = document.getElementById('time_picker_group');
-        if(timePickerGroup) {
-            timePickerGroup.addEventListener('click', () => {
-                timePicker.open();
+    function updateProgress() {
+        let filled = 0;
+        sections.forEach((sec, i) => {
+            const reqFields = sec.querySelectorAll('[required]');
+            let sectionFilled = true;
+            reqFields.forEach(f => {
+                if (f.id === 'other_programme_text' && document.getElementById('programme').value !== 'Other') return;
+                if (f.id === 'other_department_text' && document.getElementById('department').value !== 'OTHER') return;
+                if (!f.value || f.value === '') sectionFilled = false;
             });
+            if (sectionFilled && reqFields.length > 0) filled++;
+        });
+        progressSteps.forEach((step, i) => {
+            step.classList.toggle('done', i < filled);
+            step.classList.toggle('active', i === filled);
+        });
+    }
+
+    document.getElementById('bookingForm').addEventListener('input', updateProgress);
+
+    // Department auto-fill
+    window.updateDepartment = function() {
+        const prog = document.getElementById('programme').value;
+        const dept = document.getElementById('department');
+        const otherProg = document.getElementById('other_programme_container');
+        const otherDept = document.getElementById('other_department_container');
+        const otherProgInput = document.getElementById('other_programme_text');
+        const otherDeptInput = document.getElementById('other_department_text');
+
+        if (prog === 'Other') {
+            otherProg.style.display = 'block';
+            otherProgInput.required = true;
+            dept.value = 'OTHER';
+            otherDept.style.display = 'block';
+            otherDeptInput.required = true;
+        } else {
+            otherProg.style.display = 'none';
+            otherProgInput.required = false;
+            if (PROGRAM_MAPPINGS[prog]) {
+                dept.value = PROGRAM_MAPPINGS[prog];
+            }
+            otherDept.style.display = 'none';
+            otherDeptInput.required = false;
         }
+        updateProgress();
+    };
 
-        // Form submission via API
-        const bookingForm = document.getElementById('bookingForm');
-        
-        bookingForm.addEventListener('submit', async event => {
-            event.preventDefault();
-            
-            if (!bookingForm.checkValidity()) {
-                event.stopPropagation();
-                bookingForm.classList.add('was-validated');
-                return;
+    window.checkOtherDept = function() {
+        const dept = document.getElementById('department').value;
+        const otherDept = document.getElementById('other_department_container');
+        const otherDeptInput = document.getElementById('other_department_text');
+        otherDept.style.display = dept === 'OTHER' ? 'block' : 'none';
+        otherDeptInput.required = dept === 'OTHER';
+    };
+
+    // Date min
+    const dateInput = document.getElementById('preferred_date');
+    if (dateInput) dateInput.min = new Date().toISOString().split('T')[0];
+
+    // Time picker
+    const timePicker = flatpickr('#preferred_time', {
+        enableTime: true, noCalendar: true,
+        dateFormat: 'h:i K', minTime: '08:00', maxTime: '16:30',
+        minuteIncrement: 1, static: true,
+        onChange: function(sel) {
+            if (sel.length && sel[0].getHours() === 13) {
+                Swal.fire({ icon: 'info', title: 'Lunch Break', text: 'Counsellor is on break 1-2 PM.', timer: 3000, showConfirmButton: false });
+                this.clear();
             }
-            bookingForm.classList.add('was-validated');
+        }
+    });
+    const tg = document.getElementById('time_picker_group');
+    if (tg) tg.addEventListener('click', () => timePicker.open());
 
-            // Gather data
-            const formData = new FormData(bookingForm);
-            let data = Object.fromEntries(formData.entries());
-
-            // Smart logic: Use custom values if "Other" is selected
-            if (data.programme === "Other") {
-                data.programme = data.other_programme_text || "Other";
-            }
-            if (data.department === "OTHER") {
-                data.department = data.other_department_text || "OTHER";
-            }
-
-            // Disable button and show loading...
-            const submitBtn = bookingForm.querySelector('.btn-submit');
-            const btnSpan = submitBtn.querySelector('span');
-            const icon = submitBtn.querySelector('i');
-            
-            icon.classList.remove('bi-send-fill');
-            icon.classList.add('spinner-border', 'spinner-border-sm');
-            btnSpan.innerText = ' Sending...';
-            submitBtn.disabled = true;
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/submit_booking`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                const result = await response.json();
-                console.log("Portal Response:", result);
-                
-                if (response.ok && result.status === 'success') {
-                    // Success! Show SweetAlert and reset form
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Booking Successful!',
-                        html: `
-                            <p class="mb-3">Your appointment is successful, a staff will call you for confirmation.</p>
-                            <p class="mb-0">Your booking reference is: <strong>${result.reference}</strong></p>
-                            <p class="text-muted small">Please save this reference for your records.</p>
-                        `,
-                        confirmButtonText: 'Done',
-                        confirmButtonColor: 'var(--primary)',
-                        customClass: { 
-                            popup: 'rounded-4 shadow-lg border-0',
-                            confirmButton: 'px-5 py-2 rounded-3 fw-bold'
-                        }
-                    }).then(() => {
-                        window.location.reload();
-                    });
-                    bookingForm.reset();
-                    bookingForm.classList.remove('was-validated');
-                    
-                    // Reset custom flatpickr if needed
-                    document.getElementById('preferred_time').value = "";
-                } else {
-                    // Server returned error
-                    console.error("Submission failed:", result);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Submission Failed',
-                        text: result.details || result.error || 'There was an issue processing your booking.',
-                        confirmButtonColor: '#842029',
-                        customClass: { popup: 'rounded-4' }
-                    });
-                }
-            } catch (error) {
-                console.error("Fetch error:", error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'System Error',
-                    text: 'Could not connect to the cloud bridge. Please try again later.',
-                    confirmButtonColor: '#842029',
-                    customClass: { popup: 'rounded-4' }
-                });
-            } finally {
-                // Re-enable button
-                submitBtn.disabled = false;
-                btnSpan.innerText = ' Send Request';
-                icon.classList.remove('spinner-border', 'spinner-border-sm');
-                icon.classList.add('bi-send-fill');
+    // Inline validation
+    const form = document.getElementById('bookingForm');
+    const requiredFields = form.querySelectorAll('[required]');
+    requiredFields.forEach(f => {
+        f.addEventListener('blur', function() {
+            if (this.id === 'other_programme_text' && document.getElementById('programme').value !== 'Other') return;
+            if (this.id === 'other_department_text' && document.getElementById('department').value !== 'OTHER') return;
+            const errEl = document.getElementById('err_' + this.id);
+            if (this.value && this.value.trim()) {
+                this.classList.remove('error');
+                if (errEl) errEl.classList.remove('show');
+            } else {
+                this.classList.add('error');
+                if (errEl) errEl.classList.add('show');
             }
         });
-    })();
+    });
+
+    // Submit
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        if (!form.checkValidity()) {
+            e.stopPropagation();
+            form.classList.add('was-validated');
+            requiredFields.forEach(f => {
+                const errEl = document.getElementById('err_' + f.id);
+                if (!f.value && errEl) errEl.classList.add('show');
+            });
+            return;
+        }
+
+        const formData = new FormData(form);
+        let data = Object.fromEntries(formData.entries());
+        if (data.programme === 'Other') data.programme = data.other_programme_text || 'Other';
+        if (data.department === 'OTHER') data.department = data.other_department_text || 'OTHER';
+
+        const btn = document.getElementById('submitBtn');
+        btn.classList.add('loading');
+        btn.disabled = true;
+
+        try {
+            const resp = await fetch(API_BASE_URL + '/api/submit_booking', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await resp.json();
+
+            if (resp.ok && result.status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Booking Confirmed!',
+                    html: '<p>Your appointment has been scheduled.</p><p style="margin:12px 0 0"><strong style="font-size:1.1em">Reference: ' + result.reference + '</strong></p><p style="color:#888;font-size:0.85em;margin-top:8px">Save this reference. A confirmation SMS will be sent to your phone.</p>',
+                    confirmButtonText: 'Done',
+                    confirmButtonColor: '#9b111a',
+                    customClass: { popup: 'swal2-popup rounded-4', confirmButton: 'px-5 py-2 rounded-3 fw-bold' }
+                }).then(() => window.location.reload());
+            } else {
+                Swal.fire({ icon: 'error', title: 'Submission Failed', text: result.message || 'Please try again.', confirmButtonColor: '#842029' });
+            }
+        } catch(err) {
+            Swal.fire({ icon: 'error', title: 'Connection Error', text: 'Could not reach the server. Please try again.', confirmButtonColor: '#842029' });
+        } finally {
+            btn.classList.remove('loading');
+            btn.disabled = false;
+        }
+    });
+
+    updateProgress();
+})();
 </script>
 </body>
 </html>
